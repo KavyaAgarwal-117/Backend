@@ -1,5 +1,5 @@
 const express = require("express");
-const Model = require("../models/UserModels");
+const Model = require("../models/ProductModel");
 
 const router = express.Router();
 
@@ -28,8 +28,8 @@ router.get("/getall", (req, res) => {
 });
 
 // : denotes url parameter
-router.get("/getbycity/:city", (req, res) => {
-  Model.find({ city: req.params.city })
+router.get("/getbyproduct/:product", (req, res) => {
+  Model.find({ product: req.params.product })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -39,8 +39,8 @@ router.get("/getbycity/:city", (req, res) => {
     });
 });
 
-router.get("/getbyemail/:email", (req, res) => {
-  Model.find({ email: req.params.email })
+router.get("/getbybrand/:brand", (req, res) => {
+  Model.find({ brand: req.params.brand })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -50,8 +50,30 @@ router.get("/getbyemail/:email", (req, res) => {
     });
 });
 
-router.get("/getbyid/:id", (req, res) => {
-  Model.findById(req.params.id)
+router.get("/getbyprice/:price", (req, res) => {
+  Model.findByPrice(req.params.price)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+router.get("/getbycolor/:color", (req, res) => {
+  Model.find({ color: req.params.color })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+router.get("/getbycategory/:category", (req, res) => {
+  Model.find({ category: req.params.category })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -72,14 +94,8 @@ router.put("/update/:id", (req, res) => {
     });
 });
 
-router.delete("/delete/:id", (req, res) => {
-  Model.findByIdAndDelete(req.params.id)
-  .then((result) => {
-    res.status(200).json(result);
-  }).catch((err) => {
-    console.log(err);    
-    res.status(500).json(err);
-  });
+router.get("/delete", (req, res) => {
+  res.send("response from user delete");
 });
 
 module.exports = router;
