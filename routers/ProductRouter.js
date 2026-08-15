@@ -12,7 +12,7 @@ router.post("/add", (req, res) => {
       res.status(200).json(result);
     })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
       res.status(500).json(err);
     });
 });
@@ -29,8 +29,8 @@ router.get("/getall", (req, res) => {
 });
 
 // : denotes url parameter
-router.get("/getbyproduct/:product", (req, res) => {
-  Model.find({ product: req.params.product })
+router.get("/getbytitle/:title", (req, res) => {
+  Model.find({ title: req.params.title })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -52,7 +52,7 @@ router.get("/getbybrand/:brand", (req, res) => {
 });
 
 router.get("/getbyprice/:price", (req, res) => {
-  Model.findByPrice(req.params.price)
+  Model.find({ price: req.params.price })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -62,8 +62,8 @@ router.get("/getbyprice/:price", (req, res) => {
     });
 });
 
-router.get("/getbycolor/:color", (req, res) => {
-  Model.find({ color: req.params.color })
+router.get("/getbyimage/:image", (req, res) => {
+  Model.find({ image: req.params.image })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -84,6 +84,17 @@ router.get("/getbycategory/:category", (req, res) => {
     });
 });
 
+router.get("/getbyid/:id", (req, res) => {
+  Model.findById(req.params.id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 router.put("/update/:id", (req, res) => {
   Model.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((result) => {
@@ -95,8 +106,15 @@ router.put("/update/:id", (req, res) => {
     });
 });
 
-router.get("/delete", (req, res) => {
-  res.send("response from user delete");
+router.delete("/delete/:id", (req, res) => {
+  Model.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
