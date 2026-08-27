@@ -3,8 +3,9 @@ const Model = require("../models/UserModels");
 
 const router = express.Router();
 
-require('dotenv').config();
 const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
+require("dotenv").config();
 
 router.post("/add", (req, res) => {
   console.log(req.body);
@@ -77,53 +78,46 @@ router.put("/update/:id", (req, res) => {
 
 router.delete("/delete/:id", (req, res) => {
   Model.findByIdAndDelete(req.params.id)
-  .then((result) => {
-    res.status(200).json(result);
-  }).catch((err) => {
-    console.log(err);    
-    res.status(500).json(err);
-  });
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
-router.post('/authenticate', (req,res) =>{
-  const{email, password} = req.body;
-  Model.findOne({email, password})
-  .then((result) => {
+router.post("/authenticate", (req, res) => {
+  const { email, password } = req.body;
+  Model.findOne({ email, password })
+    .then((result) => {
+      if (result) {
+        //details match then
+        //create token
+        const { _id, name } = result;
 
-    if(result){
-      //details match then
-      //create token 
-      const { _id, name} = result;
-
-      jwt.sign(
-        { _id, name },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' },
-        (err, token)=>{
-            if(err){
-            console.log(err);
-            res.status(500).json(err);
-            
-          } else{
+        jwt.sign(
+          { _id, name },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" },
+          (err, token) => {
+            if (err) {
+              console.log(err);
+              res.status(500).json(err);
+            } else {
               res.status(200).json({ token });
-
-          }
-        }
-
-      )
-
-      
-    }else{
-      //details doesn't match
-      res.status(403).json({ message: 'Invalid Credentials'})
-    }
-    
-  }).catch((err) => {
-    console.log(err);
-    res.status(500).json(err);
-    
-    
-  });
-})
+            }
+          },
+        );
+      } else {
+        //details doesn't match
+        res.status(403).json({ message: "Invalid Credentials" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
 
 module.exports = router;
