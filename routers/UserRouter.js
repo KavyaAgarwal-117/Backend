@@ -85,4 +85,45 @@ router.delete("/delete/:id", (req, res) => {
   });
 });
 
+router.post('/authenticate', (req,res) =>{
+  const{email, password} = req.body;
+  Model.findOne({email, password})
+  .then((result) => {
+
+    if(result){
+      //details match then
+      //create token 
+      const { _id, name} = result;
+
+      jwt.sign(
+        { _id, name },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' },
+        (err, token)=>{
+            if(err){
+            console.log(err);
+            res.status(500).json(err);
+            
+          } else{
+              res.status(200).json({ token });
+
+          }
+        }
+
+      )
+
+      
+    }else{
+      //details doesn't match
+      res.status(403).json({ message: 'Invalid Credentials'})
+    }
+    
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+    
+    
+  });
+})
+
 module.exports = router;
