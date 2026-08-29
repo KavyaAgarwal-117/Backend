@@ -4,7 +4,7 @@ const Model = require("../models/UserModels");
 const router = express.Router();
 
 const jwt = require("jsonwebtoken");
-const auth = require("../middleware/auth");
+const auth = require("../middlewares/auth");
 require("dotenv").config();
 
 router.post("/add", (req, res) => {
