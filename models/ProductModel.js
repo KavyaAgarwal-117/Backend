@@ -4,11 +4,9 @@ const mySchema = new Schema(
   {
     title: { type: String, require: true },
     brand: { type: String, require: true },
-    price: { type: Number, require: true },
-    image: { type: String, require: true },
-    category: { type: String, default: "Unknown" },
+    price: { type: Number, default: 0 },
+    image: { type: String },
   },
-  { timestamps: true },
-);
+  { timestamps: true });
 
 module.exports = model("products", mySchema);
