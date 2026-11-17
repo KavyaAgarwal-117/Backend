@@ -1,13 +1,12 @@
 const express = require("express");
+const router = express.Router();
 const Model = require("../models/ProductModel");
 
-const router = express.Router();
 
-router.post("/add", (req, res) => {
+router.post('/add', (req, res) => {
   console.log(req.body);
-  //res.send('response from user add');
-  new Model(req.body)
-    .save()
+  
+  new Model(req.body).save()
     .then((result) => {
       res.status(200).json(result);
     })
@@ -17,96 +16,33 @@ router.post("/add", (req, res) => {
     });
 });
 
-router.get("/getall", (req, res) => {
+router.get('/getall', (req, res) => {
+
   Model.find()
-    .then((result) => {
+  .then((result) => {
       res.status(200).json(result);
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
-});
+})
+
 
 // : denotes url parameter
-router.get("/getbytitle/:title", (req, res) => {
-  Model.find({ title: req.params.title })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
+router.get('/getbyid/:id', (req, res) => {
 
-router.get("/getbybrand/:brand", (req, res) => {
-  Model.find({ brand: req.params.brand })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.get("/getbyprice/:price", (req, res) => {
-  Model.find({ price: req.params.price })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.get("/getbyimage/:image", (req, res) => {
-  Model.find({ image: req.params.image })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.get("/getbycategory/:category", (req, res) => {
-  Model.find({ category: req.params.category })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.get("/getbyid/:id", (req, res) => {
   Model.findById(req.params.id)
-    .then((result) => {
+  .then((result) => {
       res.status(200).json(result);
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
-});
+})
 
-router.put("/update/:id", (req, res) => {
-  Model.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.delete("/delete/:id", (req, res) => {
+router.delete('/delete', (req, res) => {
   Model.findByIdAndDelete(req.params.id)
     .then((result) => {
       res.status(200).json(result);
@@ -114,6 +50,16 @@ router.delete("/delete/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
+    });
+});
+
+router.get('/getbybrand/:brandname',(req, res) => {
+    Model.find({ brand: req.params.brandname})
+    .then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
     });
 });
 
